@@ -14,7 +14,7 @@ class ProductController extends Controller
     {
         $products = Product::all();
 
-        return view("templates.product.indexprod");
+        return view("templates.product.indexprod", compact('products'));
     }
 
     /**
@@ -58,45 +58,49 @@ class ProductController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-    
+   /**
+    * Show the form for editing the specified resource.
+    */
+   public function edit(string $id)
+   {
        $ProductType = Product::findOrFail($id);
 
-       return view("templates.product.editprod", compact('ProductType'));
-    }
+       return view("templates.product.editproduct", compact('ProductType'));
+   }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        // Validation des données du formulaire
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'prix' => 'required|numeric|min:0',
-        ]);
+   /**
+    * Update the specified resource in storage.
+    */
+   public function update(Request $request, string $id)
+   {
+       // Validation des données du formulaire
+       $validatedData = $request->validate([
+           'name' => 'required|string|max:255',
+           'prix' => 'required|numeric|min:0',
+       ]);
 
-        // Retrouver l'identifiant
-        $ProductType = Product::findOrFail($id);
-        
-        // Mise à jour des données
-        $ProductType->name = $validatedData['name'];
-        $ProductType->priceHt = $validatedData['prix'];
-        $ProductType->dateUpdate = now(); 
-        $ProductType->save();
+       // Retrouver l'identifiant
+       $ProductType = Product::findOrFail($id);
+       
+       // Mise à jour des données
+       $ProductType->name = $validatedData['name'];
+       $ProductType->priceHt = $validatedData['prix'];
+       $ProductType->dateUpdate = now(); 
+       $ProductType->save();
 
-        return redirect('/product')->with('success', 'Produit mis à jour !');
-}
+       return redirect('/product')->with('success', 'Produit mis à jour !');
+   }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return redirect('/product')->with('success', 'Produit supprimé !');
     }
+
 }

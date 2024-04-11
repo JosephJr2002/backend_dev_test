@@ -5,20 +5,23 @@
 		<h2>Modifier un produit</h2>
 	</div>
 	<div class="container-fluid mt-3">
-		<form class="form-control" method="Post" action="{{'/product/update/{id}'}}">
-			@csrf
-			<div class="mb-3">
-			  <label for="name" class="form-label">Nom du produit</label>
-			  <input type="text" name="{{$ProductType->name}}" class="form-control" id="name" placeholder="Nom du produit">
-			</div>
-			<div class="mb-3">
-			  <label for="prix" class="form-label">Prix du produit</label>
-			  <input type="number" name="{{$ProductType->priceHt}}" class="form-control" id="prix" placeholder="2000">
-			</div>
-			<div class="mb-3 d-flex justify-content-around">
-				<button type="submit" class="btn btn-info">Modifier</button>
-			</div>
+		<!-- Edit Product Form -->
+		<form method="POST" action="/product/update/{{ $ProductType->id }}">
+		    @csrf
+		    @method('PUT')
+
+		    <div class="mb-3">
+		        <label for="name" class="form-label">Nom du produit</label>
+		        <input type="text" class="form-control" id="name" name="name" value="{{ $ProductType->name }}" required>
+		    </div>
+		    <div class="mb-3">
+		        <label for="prix" class="form-label">Prix du produit</label>
+		        <input type="number" class="form-control" id="prix" name="prix" value="{{ $ProductType->priceHt }}" required>
+		    </div>
+		    
+		    <button type="submit" class="btn btn-primary">Mettre à jour</button>
 		</form>
+
 	</div>
 
 	@endsection
