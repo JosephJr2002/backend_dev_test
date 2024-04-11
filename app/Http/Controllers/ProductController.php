@@ -14,7 +14,7 @@ class ProductController extends Controller
     {
         $products = Product::all();
 
-        return view("indexprod");
+        return view("templates.product.indexprod");
     }
 
     /**
@@ -22,7 +22,7 @@ class ProductController extends Controller
      */
     public function new()
     {
-        return view("newprod");
+        return view("templates.product.newprod");
     }
 
     /**
@@ -63,7 +63,10 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+    
+       $ProductType = Product::findOrFail($id);
+
+       return view("templates.product.editprod", compact('ProductType'));
     }
 
     /**
@@ -71,8 +74,23 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-    }
+        // Validation des données du formulaire
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'prix' => 'required|numeric|min:0',
+        ]);
+
+        // Retrouver l'identifiant
+        $ProductType = Product::findOrFail($id);
+        
+        // Mise à jour des données
+        $ProductType->name = $validatedData['name'];
+        $ProductType->priceHt = $validatedData['prix'];
+        $ProductType->dateUpdate = now(); 
+        $ProductType->save();
+
+        return redirect('/product')->with('success', 'Produit mis à jour !');
+}
 
     /**
      * Remove the specified resource from storage.

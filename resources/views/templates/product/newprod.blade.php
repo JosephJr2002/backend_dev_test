@@ -1,6 +1,9 @@
 @extends('layout.app')
 	@section('content')
 
+	<div class="mt-2">
+		<h2>Créer un produit</h2>
+	</div>
 	<div class="container-fluid mt-3">
 		<form class="form-control" method="Post" action="{{'/product/new'}}">
 			@csrf
