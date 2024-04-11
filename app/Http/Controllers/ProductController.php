@@ -20,18 +20,35 @@ class ProductController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function new()
     {
-        //
+        return view("newprod");
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
+        * Store a newly created product in storage.
+        *
+        * @param  \Illuminate\Http\Request  $request
+        * @return \Illuminate\Http\Response
+        */
     public function store(Request $request)
-    {
-        //
-    }
+   {
+       // validation des données du formulaire
+       $validatedData = $request->validate([
+           'name' => 'required|string|max:255',
+           'prix' => 'required|numeric|min:0',
+       ]);
+
+       // Create a new product instance
+       $product = new Product();
+       $product->name = $validatedData['name'];
+       $product->priceHt = $validatedData['prix'];
+       $product->creationDate = now(); 
+       $product->save();
+
+        return redirect('/product')->with('success', 'Nouveau produit ajouté !');
+
+   }
 
     /**
      * Display the specified resource.
